@@ -1,0 +1,10 @@
+# Dev / editor
+.claude/
+.vscode/
+node_modules/
+
+# Sistema
+Thumbs.db
+.DS_Store
+*.log
+*.tmp

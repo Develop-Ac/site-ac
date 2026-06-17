@@ -1,0 +1,22 @@
+COLOQUE AS LOGOS OFICIAIS DA AC ACESSÓRIOS NESTA PASTA
+=======================================================
+
+O site já funciona com uma versão do logo desenhada em SVG (vetor),
+nas cores da marca. Mas o ideal é usar os arquivos OFICIAIS que você tem.
+
+Salve aqui os PNGs (de preferência com fundo transparente) com estes nomes:
+
+  - logo-acessorios-cor.png   -> logo completo (ícone + "ACESSÓRIOS"), versão colorida
+  - logo-acessorios-branco.png-> versão BRANCA (para usar no rodapé escuro / topo escuro)
+  - logo-ac-icone.png         -> só o ícone "AC" (favicon / marca compacta)
+  - logo-atacado.png          -> logo "AC ATACADO" (se quiser usar)
+
+Depois é só me avisar ("já coloquei as logos") que eu troco o logo em
+SVG do cabeçalho e do rodapé pelos seus arquivos PNG oficiais e gero o
+favicon do site.
+
+Cores oficiais da marca (já aplicadas no site):
+  Verde limão .... #A6CE2E   (escuro: #7FA414)
+  Azul ........... #15479E   (escuro: #0E3576)
+  Cinza metálico . #6E7073
+  Branco ......... #FFFFFF

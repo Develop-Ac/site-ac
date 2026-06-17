@@ -1,0 +1,18 @@
+# Arquivos que NÃO entram na imagem Docker
+.claude/
+.vscode/
+.git/
+.gitignore
+Dockerfile
+.dockerignore
+DEPLOY.md
+README.md
+**/*.md
+node_modules/
+# Instruções internas que não fazem parte do site
+assets/img/logos/COLOQUE-AS-LOGOS-AQUI.txt
+# Arquivos temporários
+*.log
+*.tmp
+Thumbs.db
+.DS_Store
