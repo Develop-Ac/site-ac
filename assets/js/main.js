@@ -93,38 +93,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // largura de um "set" (onde o conteúdo se repete) = início da 2ª cópia
     const setWidth = () => (track.children[N] ? track.children[N].offsetLeft : track.scrollWidth / 2);
+    const wrap = (v, w) => (w > 0 ? ((v % w) + w) % w : v);
 
     const SPEED = 0.6; // px por frame (rolagem automática)
-    let dragging = false, isMouse = false, startX = 0, startScroll = 0;
+    // pos = fonte única da posição (float) — evita o travamento por arredondamento do scrollLeft no mobile
+    let pos = 0, dragging = false, startX = 0, startPos = 0;
 
     const step = () => {
       const w = setWidth();
-      if (!dragging) marquee.scrollLeft += SPEED;
-      if (!dragging && w > 0) {
-        if (marquee.scrollLeft >= w) marquee.scrollLeft -= w;       // loop infinito
-        else if (marquee.scrollLeft < 0) marquee.scrollLeft += w;
-      }
+      if (!dragging) pos += SPEED;
+      pos = wrap(pos, w);                 // loop infinito nos dois sentidos
+      marquee.scrollLeft = pos;
       requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
 
-    // ---- arrastar para frente/trás (pausa só enquanto arrasta) ----
+    // ---- arrastar p/ frente e trás (mouse e touch) — pausa só enquanto arrasta ----
     marquee.addEventListener("pointerdown", (e) => {
       dragging = true;
-      isMouse = e.pointerType === "mouse";
-      if (isMouse) {
-        startX = e.clientX;
-        startScroll = marquee.scrollLeft;
-        try { marquee.setPointerCapture(e.pointerId); } catch (_) {}
-      }
+      startX = e.clientX;
+      startPos = pos;
+      if (e.pointerType === "mouse") { try { marquee.setPointerCapture(e.pointerId); } catch (_) {} }
       marquee.classList.add("grabbing");
     });
     marquee.addEventListener("pointermove", (e) => {
-      if (!dragging || !isMouse) return; // no touch, o scroll nativo cuida
-      const w = setWidth();
-      let target = startScroll - (e.clientX - startX);
-      if (w > 0) target = ((target % w) + w) % w; // scrub infinito nos dois sentidos
-      marquee.scrollLeft = target;
+      if (!dragging) return;
+      pos = startPos - (e.clientX - startX); // o wrap acontece no step()
     });
     const endDrag = () => { dragging = false; marquee.classList.remove("grabbing"); };
     ["pointerup", "pointercancel", "pointerleave"].forEach((ev) =>

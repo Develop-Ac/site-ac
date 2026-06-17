@@ -301,7 +301,7 @@ h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); font-weight: 800; }
   position: relative; width: 100%;
   /* arrastável: rolagem horizontal controlada por JS */
   overflow-x: auto; overflow-y: hidden;
-  cursor: grab; -webkit-overflow-scrolling: touch;
+  cursor: grab; touch-action: pan-y; /* horizontal = nosso JS; vertical = scroll da página */
   scrollbar-width: none; -ms-overflow-style: none;
   /* espaço vertical para a caixa "subir" no hover sem cortar a borda/sombra */
   padding: 20px 0;
