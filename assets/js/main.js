@@ -96,14 +96,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const wrap = (v, w) => (w > 0 ? ((v % w) + w) % w : v);
 
     const SPEED = 0.6; // px por frame (rolagem automática)
-    // pos = fonte única da posição (float) — evita o travamento por arredondamento do scrollLeft no mobile
+    // pos = deslocamento (float). Aplicado via transform — não usa scroll nativo,
+    // então o navegador não disputa o movimento (resolve o travamento no mobile).
     let pos = 0, dragging = false, startX = 0, startPos = 0;
 
     const step = () => {
       const w = setWidth();
       if (!dragging) pos += SPEED;
       pos = wrap(pos, w);                 // loop infinito nos dois sentidos
-      marquee.scrollLeft = pos;
+      track.style.transform = `translateX(${-pos}px)`;
       requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
@@ -113,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
       dragging = true;
       startX = e.clientX;
       startPos = pos;
-      if (e.pointerType === "mouse") { try { marquee.setPointerCapture(e.pointerId); } catch (_) {} }
+      try { marquee.setPointerCapture(e.pointerId); } catch (_) {}
       marquee.classList.add("grabbing");
     });
     marquee.addEventListener("pointermove", (e) => {
@@ -121,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
       pos = startPos - (e.clientX - startX); // o wrap acontece no step()
     });
     const endDrag = () => { dragging = false; marquee.classList.remove("grabbing"); };
-    ["pointerup", "pointercancel", "pointerleave"].forEach((ev) =>
+    ["pointerup", "pointercancel"].forEach((ev) =>
       marquee.addEventListener(ev, endDrag)
     );
   }

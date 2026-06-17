@@ -198,7 +198,7 @@ h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); font-weight: 800; }
 .about__media {
   position: relative; min-height: 380px; border-radius: var(--radius); overflow: hidden;
   /* foto da loja como fundo (cor escura de segurança caso a imagem falte) */
-  background: #0c1726 url("../img/loja-fachada.jpg") center center / cover no-repeat;
+  background: #0c1726 url("../img/loja-fachada.jpg?v=2") center center / cover no-repeat;
   box-shadow: var(--shadow);
 }
 .about__media::before {
@@ -298,19 +298,16 @@ h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); font-weight: 800; }
 .brands { padding: clamp(60px, 8vw, 90px) 0; background: var(--bg); overflow: hidden; }
 .brands .section-head { margin-bottom: 40px; }
 .marquee {
-  position: relative; width: 100%;
-  /* arrastável: rolagem horizontal controlada por JS */
-  overflow-x: auto; overflow-y: hidden;
-  cursor: grab; touch-action: pan-y; /* horizontal = nosso JS; vertical = scroll da página */
-  scrollbar-width: none; -ms-overflow-style: none;
+  position: relative; width: 100%; overflow: hidden;
+  /* arrastável via transform (sem container de scroll); horizontal = JS, vertical = página */
+  cursor: grab; touch-action: pan-y;
   /* espaço vertical para a caixa "subir" no hover sem cortar a borda/sombra */
   padding: 20px 0;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
-.marquee::-webkit-scrollbar { display: none; }
 .marquee.grabbing { cursor: grabbing; }
-.marquee__track { display: flex; align-items: center; gap: 28px; width: max-content; }
+.marquee__track { display: flex; align-items: center; gap: 28px; width: max-content; will-change: transform; }
 
 .brand-item {
   flex: 0 0 auto; height: 96px; min-width: 170px; padding: 0 26px;
