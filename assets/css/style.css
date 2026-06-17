@@ -298,33 +298,34 @@ h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); font-weight: 800; }
 .brands { padding: clamp(60px, 8vw, 90px) 0; background: var(--bg); overflow: hidden; }
 .brands .section-head { margin-bottom: 40px; }
 .marquee {
-  position: relative; width: 100%; overflow: hidden;
+  position: relative; width: 100%;
+  /* arrastável: rolagem horizontal controlada por JS */
+  overflow-x: auto; overflow-y: hidden;
+  cursor: grab; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; -ms-overflow-style: none;
   /* espaço vertical para a caixa "subir" no hover sem cortar a borda/sombra */
   padding: 20px 0;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
-.marquee__track {
-  display: flex; align-items: center; gap: 28px; width: max-content;
-  animation: marquee 55s linear infinite;
-}
-.marquee:hover .marquee__track { animation-play-state: paused; }
-@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee::-webkit-scrollbar { display: none; }
+.marquee.grabbing { cursor: grabbing; }
+.marquee__track { display: flex; align-items: center; gap: 28px; width: max-content; }
 
 .brand-item {
   flex: 0 0 auto; height: 96px; min-width: 170px; padding: 0 26px;
   display: flex; align-items: center; justify-content: center;
   background: #fff; border: 1px solid var(--line); border-radius: 14px;
   box-shadow: var(--shadow-sm); transition: transform .2s, box-shadow .2s, border-color .2s;
+  user-select: none;
 }
 .brand-item:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--green); }
-.brand-item img { max-height: 56px; max-width: 150px; width: auto; object-fit: contain; filter: grayscale(1); opacity: .72; transition: filter .25s, opacity .25s; }
+.brand-item img { max-height: 56px; max-width: 150px; width: auto; object-fit: contain; filter: grayscale(1); opacity: .72; transition: filter .25s, opacity .25s; -webkit-user-drag: none; user-select: none; pointer-events: none; }
 .brand-item:hover img { filter: none; opacity: 1; }
 .brand-item--text {
   font-family: var(--ff-head); font-weight: 800; font-size: 1.15rem; letter-spacing: .02em;
   color: var(--blue); text-transform: uppercase; white-space: nowrap;
 }
-@media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; } }
 
 /* ===== NÚMEROS ===== */
 .numbers {

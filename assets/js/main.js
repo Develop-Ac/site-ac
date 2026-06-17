@@ -47,6 +47,20 @@ const BRANDS = [
   { name: "Vip Rack de Tetos", slug: "vip-rack" },
   { name: "Blawers", slug: "blawers" },
   { name: "Engekar", slug: "engekar" },
+  { name: "Bruck", slug: "bruck" },
+  { name: "Metalvis", slug: "metalvis" },
+  { name: "BRB Tapetes", slug: "brb-tapetes" },
+  { name: "Camper", slug: "camper" },
+  { name: "Unipac", slug: "unipac" },
+  { name: "Mundial Prime", slug: "mundial-prime" },
+  { name: "Atemis", slug: "atemis" },
+  { name: "Ziniguel", slug: "ziniguel" },
+  { name: "NAT", slug: "nat" },
+  { name: "Autplast", slug: "autplast" },
+  { name: "Marcon Emblemas e Calhas", slug: "marcon" },
+  { name: "Vetor", slug: "vetor" },
+  { name: "Teslla", slug: "teslla" },
+  { name: "LS Indústria", slug: "ls-industria" },
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -57,13 +71,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ---- Carrossel de marcas ---- */
   const track = document.getElementById("marqueeTrack");
-  if (track && BRANDS.length) {
+  const marquee = document.getElementById("marquee");
+  if (track && marquee && BRANDS.length) {
     const makeItem = (b) => {
       const item = document.createElement("div");
       item.className = "brand-item";
       const img = document.createElement("img");
       img.src = `assets/img/marcas/${b.slug}.png`;
       img.alt = b.name;
+      img.draggable = false;
       img.addEventListener("error", () => {
         item.classList.add("brand-item--text");
         item.textContent = b.name;
@@ -71,10 +87,49 @@ document.addEventListener("DOMContentLoaded", () => {
       item.appendChild(img);
       return item;
     };
-    // duplica a lista para o loop ser contínuo (a animação desloca -50%)
+    // duplica a lista para o loop ser contínuo
+    const N = BRANDS.length;
     [...BRANDS, ...BRANDS].forEach((b) => track.appendChild(makeItem(b)));
-    // velocidade proporcional à quantidade de itens
-    track.style.animationDuration = `${Math.max(40, BRANDS.length * 2.2)}s`;
+
+    // largura de um "set" (onde o conteúdo se repete) = início da 2ª cópia
+    const setWidth = () => (track.children[N] ? track.children[N].offsetLeft : track.scrollWidth / 2);
+
+    const SPEED = 0.6; // px por frame (rolagem automática)
+    let dragging = false, isMouse = false, startX = 0, startScroll = 0;
+
+    const step = () => {
+      const w = setWidth();
+      if (!dragging) marquee.scrollLeft += SPEED;
+      if (!dragging && w > 0) {
+        if (marquee.scrollLeft >= w) marquee.scrollLeft -= w;       // loop infinito
+        else if (marquee.scrollLeft < 0) marquee.scrollLeft += w;
+      }
+      requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+
+    // ---- arrastar para frente/trás (pausa só enquanto arrasta) ----
+    marquee.addEventListener("pointerdown", (e) => {
+      dragging = true;
+      isMouse = e.pointerType === "mouse";
+      if (isMouse) {
+        startX = e.clientX;
+        startScroll = marquee.scrollLeft;
+        try { marquee.setPointerCapture(e.pointerId); } catch (_) {}
+      }
+      marquee.classList.add("grabbing");
+    });
+    marquee.addEventListener("pointermove", (e) => {
+      if (!dragging || !isMouse) return; // no touch, o scroll nativo cuida
+      const w = setWidth();
+      let target = startScroll - (e.clientX - startX);
+      if (w > 0) target = ((target % w) + w) % w; // scrub infinito nos dois sentidos
+      marquee.scrollLeft = target;
+    });
+    const endDrag = () => { dragging = false; marquee.classList.remove("grabbing"); };
+    ["pointerup", "pointercancel", "pointerleave"].forEach((ev) =>
+      marquee.addEventListener(ev, endDrag)
+    );
   }
 
   /* ---- Vídeo do hero: garante o autoplay mudo ---- */
